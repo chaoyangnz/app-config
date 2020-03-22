@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { merge } from 'lodash';
 
 import { ConfigService } from './config.service';
-import { ConfigFormat, ServerConfigOptions, parse } from './index';
+import { ConfigFormat, ServerConfigOptions, parse, resolve } from './index';
 
 export class ConfigServerService<T> extends ConfigService<T> {
   constructor(private options: ServerConfigOptions) {
@@ -10,24 +10,27 @@ export class ConfigServerService<T> extends ConfigService<T> {
   }
 
   protected async doLoad() {
-    if (this.options.configProvider) {
-      const configData = await this.options.configProvider();
-      this.config = parse<T>(configData, true);
+    if (this.options.provider) {
+      const providedConfig = await this.options.provider();
+      this.config = resolve(providedConfig);
+    } else if (this.options.loader) {
+      const loadedConfig = await this.options.loader();
+      this.config = parse(loadedConfig, true);
     } else if (this.options.paths) {
       this.config = this.loadFile(this.options.paths);
     } else {
-      throw new Error('Either `configProvider` or `path` should be specified');
+      throw new Error('Either `paths`, `loader` or `provider` should be specified');
     }
   }
 
   private loadFile(paths: string[] = []): T {
     const configs = paths.map(path => {
-      const extension = path.split('.').pop()
+      const extension = path.split('.').pop();
       return parse({
         text: fs.readFileSync(path, 'utf8'),
         format: extension as ConfigFormat,
       });
-    })
+    });
     return merge(configs);
   }
 }

@@ -28,7 +28,7 @@ export class ConfigModule {
               return new ConfigBrowserService(options.browser!, httpClient);
             }
             // tslint:disable-next-line:no-console
-            console.warn('Either browser or server config options should be provided')
+            console.warn('Either browser or server config options should be provided');
             return undefined;
           },
           deps: [CONFIG_OPTIONS, PLATFORM_ID, HttpClient],

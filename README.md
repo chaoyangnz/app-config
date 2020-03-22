@@ -52,7 +52,7 @@ export class SomeService {
 
 In your `AppModule`
 ```
-imort { ConfigModule } from '@cloudaffine/app-config/angular';
+imort { ConfigModule } from '@cloudaffine/app-config/nestjs';
 
 @Module({
     imports: [

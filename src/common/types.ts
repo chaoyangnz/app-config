@@ -4,7 +4,8 @@ export type ServerConfigOptions = {
 
 export interface ConfigOptions {
   url?: string;
-  configProvider?: () => Promise<ConfigData>;
+  loader?: () => Promise<ConfigData>;
+  provider?: () => Promise<ConfigSchema>;
 }
 
 export type BrowserConfigOptions = ConfigOptions;
