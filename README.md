@@ -1,50 +1,80 @@
-# Jest mock extension
+# App config service for Angular and NestJS
 
-## Mock a class
+## Install
 
-This would be useful in `Angular` and `NestJS` testing.
-
-Plain class test:
 ```
-const SampleServiceMockClass: Type<ClassMock<SampleService>> = mockClass(SampleService);
-const sampleServiceMock: ClassMock<SampleService> = new SampleServiceMockClass();
+npm i @cloudaffine/app-config
 ```
 
-Angular test:
-```
-let cookieService: ClassMock<CookieService>;
+## Angular
 
-beforeEach(async () => {
-    TestBed.configureTestingModule({
-      providers: [
-        TrackingIdService,
+In your `AppModule`
+```
+import { ConfigModule } from '@cloudaffine/app-config/angular';
+import { APP_INITIALIZER } from '@angular/core';
+
+@NgModule({
+    imports: [
+        ConfigModule.forRoot({
+            browser: {
+                url: '/config.json'
+            },
+            server: {
+                paths: ['./config.yaml']
+            }
+        })
+    ],
+    providers: [
         {
-          provide: CookieService,
-          useClass: mockClass(CookieService)
+            provide: APP_INITIALIZER
+            useFactory: ConfigModule.initializer,
+            multi: true
         }
-      ]
-    });
-    cookieService = TestBed.get(CookieService);
-});
+    ]
+})
+export class AppModule {}
 ```
 
-NestJS test:
-```
-let module: TestingModule;
-let loggerService: ClassMock<LoggerService>;
+Then in your service or component, optional you can specify a type as the config schema.
 
-beforeEach(async () => {
-    module = await Test.createTestingModule({
-      controllers: [],
-      providers: [
-        ConfigService,
-        {
-          provide: LoggerService,
-          useClass: mockClass(LoggerService),
-        },
-      ],
-    }).compile();
-
-    loggerService = module.get(LoggerService);
-});
 ```
+@Injectable()
+export class SomeService {
+    constructor(private configService: ConfigService<any>) {}
+
+    func() {
+        const aa = this.configService.config.aa;
+    }
+}
+```
+
+## NestJS
+
+In your `AppModule`
+```
+imort { ConfigModule } from '@cloudaffine/app-config/angular';
+
+@Module({
+    imports: [
+        ConfigModule.forRoot({
+            paths: ['./config.yaml']
+        })
+    ]
+})
+export class AppModule {}
+```
+
+Then in your service or component, optional you can specify a type as the config schema.
+
+```
+@Injectable()
+export class SomeService {
+    constructor(private configService: ConfigService<any>) {}
+
+    func() {
+        const aa = this.configService.config.aa;
+    }
+}
+```
+
+

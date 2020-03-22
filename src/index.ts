@@ -1,1 +1,2 @@
-export * from './class-mock';
+export * from './common/types';
+export * from './common/config.service';
