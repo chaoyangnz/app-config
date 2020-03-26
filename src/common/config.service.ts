@@ -1,4 +1,6 @@
-export abstract class ConfigService<T> {
+import { ConfigSchema } from './types';
+
+export abstract class ConfigService<T extends ConfigSchema> {
   config!: T;
   private loaded = false;
 

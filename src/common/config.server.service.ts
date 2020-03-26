@@ -2,9 +2,9 @@ import * as fs from 'fs';
 import { merge } from 'lodash';
 
 import { ConfigService } from './config.service';
-import { ConfigFormat, ServerConfigOptions, parse, resolve } from './index';
+import { ConfigFormat, ConfigSchema, ServerConfigOptions, parse, resolve } from './index';
 
-export class ConfigServerService<T> extends ConfigService<T> {
+export class ConfigServerService<T extends ConfigSchema> extends ConfigService<T> {
   constructor(private options: ServerConfigOptions) {
     super();
   }
@@ -12,7 +12,7 @@ export class ConfigServerService<T> extends ConfigService<T> {
   protected async doLoad() {
     if (this.options.provider) {
       const providedConfig = await this.options.provider();
-      this.config = resolve(providedConfig);
+      this.config = resolve(providedConfig as T);
     } else if (this.options.loader) {
       const loadedConfig = await this.options.loader();
       this.config = parse(loadedConfig, true);

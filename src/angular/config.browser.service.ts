@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Optional } from '@angular/core';
 import mime from 'mime-types';
 
-import { BrowserConfigOptions, ConfigData, ConfigFormat, parse } from '../common';
+import { BrowserConfigOptions, ConfigData, ConfigFormat, ConfigSchema, parse } from '../common';
 import { ConfigService } from '../common/config.service';
 
-export class ConfigBrowserService<T> extends ConfigService<T> {
+export class ConfigBrowserService<T extends ConfigSchema> extends ConfigService<T> {
   constructor(private options: BrowserConfigOptions, @Optional() private httpClient: HttpClient) {
     super();
   }

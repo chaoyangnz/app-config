@@ -14,7 +14,9 @@
     "no-empty-interface": false,
     "no-for-in-array": true,
     "no-inferrable-types": true,
-    "no-invalid-template-strings": true,
+    "no-invalid-template-strings": {
+      "severity": "warn"
+    },
     "no-return-await": true,
     "no-string-throw": true,
     "no-var-keyword": true,

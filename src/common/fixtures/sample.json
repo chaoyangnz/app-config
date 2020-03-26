@@ -1,0 +1,14 @@
+{
+  "rate": 1,
+  "comment": "b",
+  "percentage": 12.6,
+  "dbName": "${DB_NAME}",
+  "jdbcUrl": "jdbc://${DB_HOME}:${DB_PORT}/${DB_NAME}",
+  "maxWidth": 1234,
+  "database": {
+    "timeout": 1,
+    "name": "db",
+    "utility": 12.6,
+    "url": "jdbc://${DB_HOME}:${DB_PORT}/${DB_NAME}"
+  }
+}
