@@ -14,8 +14,10 @@ function doResolve<T extends ConfigSchema>(obj: T, prefix = '') {
     if (process.env.hasOwnProperty(envVar)) {
       // check environment variables first
       if (isString(value)) {
+        // @ts-ignore
         obj[key] = process.env[envVar];
       } else if (isNumber(value)) {
+        // @ts-ignore
         obj[key] = toNumber(process.env[envVar]);
       } else {
         // tslint:disable-next-line:no-console
@@ -30,8 +32,10 @@ function doResolve<T extends ConfigSchema>(obj: T, prefix = '') {
         // tslint:disable-next-line:no-console
         console.warn(`substitute ${value} error`, result.error);
       }
+      // @ts-ignore
       obj[key] = result.value;
     } else if (isObject(value)) {
+      // @ts-ignore
       obj[key] = doResolve(value as T, `${envVar}_`);
     }
   });

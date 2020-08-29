@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Optional } from '@angular/core';
 import mime from 'mime-types';
 
@@ -11,17 +11,21 @@ export class ConfigBrowserService<T extends ConfigSchema> extends ConfigService<
   }
 
   protected async doLoad() {
-    let configData: ConfigData;
     if (this.options.provider) {
       const providedConfig = await this.options.provider();
-      this.config = providedConfig as any;
+      this.config = providedConfig as T;
     } else if (this.options.loader) {
       const loadedConfig = await this.options.loader();
       this.config = parse(loadedConfig, false);
     } else if (this.options.url) {
-      const res: any = await this.httpClient.get(this.options.url).toPromise();
-      configData = {
-        text: res.body,
+      const res = await this.httpClient
+        .get(this.options.url, {
+          observe: 'body',
+          responseType: 'text',
+        })
+        .toPromise();
+      const configData: ConfigData = {
+        text: res,
         format: this.getConfigFormat(res),
       };
       this.config = parse<T>(configData as ConfigData, false);
